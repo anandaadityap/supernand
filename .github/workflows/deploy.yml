@@ -1,4 +1,4 @@
-name: Deploy to VPS
+name: Build & Deploy to VPS
 
 on:
   push:
@@ -13,41 +13,48 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
         with:
-          node-version: "20"
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Generate Prisma Client
-        run: npx prisma generate
-
-      - name: Build Next.js
-        run: npm run build
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
-          NEXT_PUBLIC_SITE_URL: ${{ secrets.NEXT_PUBLIC_SITE_URL }}
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}:latest
+            ghcr.io/${{ github.repository }}:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Deploy to VPS
-        uses: appleboy/ssh-action@v1.0.0
+        uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
             cd /var/www/supernand
-            rsync -az --delete \
-              --exclude='node_modules' \
-              --exclude='.next' \
-              --exclude='.env' \
-              ${{ github.workspace }}/ ./ || mkdir -p /var/www/supernand
-            rsync -az ${{ github.workspace }}/ ./ 2>/dev/null || cp -r ${{ github.workspace }}/* /var/www/supernand/ 2>/dev/null || echo "Deploy attempted"
-            cd /var/www/supernand
-            npm ci --production 2>/dev/null || true
-            npx prisma generate 2>/dev/null || true
-            pm2 restart supernand-portfolio 2>/dev/null || pm2 start npm --name supernand-portfolio -- start 2>/dev/null || echo "PM2 restart attempted"
+            
+            # Pull latest docker-compose and Dockerfile
+            git pull origin main
+            
+            # Pull new image
+            docker compose pull app
+            
+            # Stop and remove old container
+            docker compose stop app
+            docker compose rm -f app
+            
+            # Start with new image
+            docker compose up -d app
+            
+            # Cleanup old images
+            docker image prune -f

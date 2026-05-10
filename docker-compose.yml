@@ -19,5 +19,24 @@ services:
       timeout: 5s
       retries: 5
 
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: supernand-app
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgresql://postgres:supernand2025@postgres:5432/portfolio_db
+      ADMIN_PASSWORD: nanda2025supernand
+      JWT_SECRET: supernand-jwt-secret-2025-change-in-production
+      NEXTAUTH_SECRET: supernand-nextauth-secret-2025
+      NEXT_PUBLIC_SITE_URL: https://supernand.tech
+      PORT: 3000
+    depends_on:
+      postgres:
+        condition: service_healthy
+
 volumes:
   postgres-data:
