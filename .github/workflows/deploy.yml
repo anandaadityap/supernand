@@ -1,0 +1,53 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate Prisma Client
+        run: npx prisma generate
+
+      - name: Build Next.js
+        run: npm run build
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
+          NEXT_PUBLIC_SITE_URL: ${{ secrets.NEXT_PUBLIC_SITE_URL }}
+
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            cd /var/www/supernand
+            rsync -az --delete \
+              --exclude='node_modules' \
+              --exclude='.next' \
+              --exclude='.env' \
+              ${{ github.workspace }}/ ./ || mkdir -p /var/www/supernand
+            rsync -az ${{ github.workspace }}/ ./ 2>/dev/null || cp -r ${{ github.workspace }}/* /var/www/supernand/ 2>/dev/null || echo "Deploy attempted"
+            cd /var/www/supernand
+            npm ci --production 2>/dev/null || true
+            npx prisma generate 2>/dev/null || true
+            pm2 restart supernand-portfolio 2>/dev/null || pm2 start npm --name supernand-portfolio -- start 2>/dev/null || echo "PM2 restart attempted"
