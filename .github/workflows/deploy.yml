@@ -6,33 +6,12 @@ on:
       - main
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: true
-          tags: |
-            ghcr.io/${{ github.repository }}:latest
-            ghcr.io/${{ github.repository }}:${{ github.sha }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
 
       - name: Deploy to VPS
         uses: appleboy/ssh-action@v1.0.3
@@ -43,18 +22,12 @@ jobs:
           script: |
             cd /var/www/supernand
             
-            # Pull latest docker-compose and Dockerfile
+            # Pull latest code
             git pull origin main
             
-            # Pull new image
-            docker compose pull app
-            
-            # Stop and remove old container
-            docker compose stop app
-            docker compose rm -f app
-            
-            # Start with new image
+            # Build and start with docker compose
+            docker compose build app
             docker compose up -d app
             
-            # Cleanup old images
+            # Cleanup
             docker image prune -f
