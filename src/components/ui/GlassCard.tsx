@@ -13,14 +13,12 @@ export function GlassCard({ children, className, hover = false, style }: GlassCa
   return (
     <div 
       className={cn(
-        'glass-card rounded-2xl p-6 md:p-8 relative overflow-hidden',
-        hover && 'glass-card-hover cursor-pointer group',
+        'glass-panel p-6 md:p-8',
+        hover && 'cursor-pointer',
         className
       )} 
       style={style}
     >
-      {/* Inner glow effect on hover */}
-      <div className="absolute inset-0 bg-gradient-to-br from-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
       {children}
     </div>
   );

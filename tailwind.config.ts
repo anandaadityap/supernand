@@ -10,28 +10,32 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        bg: {
-          DEFAULT: "var(--bg)",
-          surface: "var(--surface)",
-          elevated: "var(--surface-elevated)",
-        },
-        text: {
-          DEFAULT: "var(--text)",
-          muted: "var(--text-muted)",
-        },
-        accent: {
-          DEFAULT: "var(--accent)",
-          hover: "var(--accent-hover)",
-        },
+        brand: {
+          primary: '#B6F500', // Neon Green
+          secondary: '#4b6700',
+          bg: '#F8FBE6',      // Soft Cream
+          surface: '#ECF0DA',
+          text: '#191D10',    // Pure Dark
+          muted: '#434933',
+          inverse: '#2e3224',
+          outline: '#737A61'
+        }
       },
       fontFamily: {
-        inter: ["var(--font-inter)", "sans-serif"],
-        playfair: ["var(--font-playfair)", "serif"],
-        mono: ["var(--font-jetbrains)", "monospace"],
+        archivo: ['Archivo', 'sans-serif'],
+        inter: ['Inter', 'sans-serif'],
+        space: ['Space Grotesk', 'sans-serif'],
+        mono: ['JetBrains Mono', 'monospace'],
       },
-      backdropBlur: {
-        glass: "12px",
+      boxShadow: {
+        'brutal-sm': '2px 2px 0px 0px #191D10',
+        'brutal': '4px 4px 0px 0px #191D10',
+        'brutal-lg': '8px 8px 0px 0px #191D10',
       },
+      borderWidth: {
+        '2': '2px',
+        '4': '4px',
+      }
     },
   },
   plugins: [],

@@ -3,28 +3,31 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
-import { Layers, Code2, MessageSquare } from 'lucide-react';
+import { Code, Server, Network, ArrowUpRight } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const services = [
   {
-    icon: Layers,
-    title: 'SaaS Development',
-    description: 'We build custom Software-as-a-Service products from concept to launch. Full-stack solutions with scalable architecture.',
-    features: ['Product Strategy', 'MVP Development', 'Payment Integration', 'User Authentication', 'Analytics Dashboard'],
+    icon: Code,
+    title: 'Custom Development',
+    description: 'Bespoke web applications built from the ground up for maximum performance and scalability. Utilizing modern frameworks and rigorous testing methodologies.',
+    tags: ['React', 'Node.js', 'TypeScript'],
+    highlight: false,
   },
   {
-    icon: Code2,
-    title: 'Custom Projects',
-    description: 'Full-stack web application development tailored to your specific needs. From internal tools to customer-facing platforms.',
-    features: ['Custom Web Apps', 'API Development', 'Database Design', 'Performance Optimization', 'CI/CD Setup'],
+    icon: Server,
+    title: 'SaaS Architecture',
+    description: 'End-to-end design and implementation of multi-tenant SaaS platforms. Focusing on database design, API structures, and secure authentication flows.',
+    tags: ['PostgreSQL', 'AWS', 'Docker'],
+    highlight: true,
   },
   {
-    icon: MessageSquare,
-    title: 'Consultation',
-    description: 'Technical advisory and consultation for your existing projects. We help with architecture decisions and team augmentation.',
-    features: ['Technical Audit', 'Architecture Review', 'Code Review', 'Team Training', 'Tech Strategy'],
+    icon: Network,
+    title: 'System Integration',
+    description: 'Seamlessly connecting disparate software systems. Building robust RESTful and GraphQL APIs to ensure reliable data flow across your technical ecosystem.',
+    tags: ['REST', 'GraphQL', 'Webhooks'],
+    highlight: false,
   },
 ];
 
@@ -53,65 +56,68 @@ export function ServicesSection() {
   }, []);
 
   return (
-    <section id="services" className="py-32 px-6 relative" ref={sectionRef}>
-      {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-accent/5 to-transparent pointer-events-none" />
-      
-      <div className="max-w-5xl mx-auto relative z-10">
-        {/* Section Header */}
-        <div className="text-center mb-20">
-          <span className="inline-block text-xs font-mono text-accent uppercase tracking-widest mb-4 px-4 py-2 glass-subtle rounded-full">
-            Services
-          </span>
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-text" style={{ fontFamily: "'Playfair Display', serif" }}>
-            What We <span className="text-gradient-accent">Do</span>
-          </h2>
-          <div className="w-12 h-0.5 bg-accent mx-auto mb-4" />
-          <p className="text-base text-text-muted font-mono">// Three core services</p>
+    <section id="services" className="max-w-[1440px] mx-auto px-4 md:px-16 py-12 md:py-16" ref={sectionRef}>
+      {/* Header */}
+      <div className="mb-12 flex justify-between items-end border-b-4 border-brand-text pb-4">
+        <div>
+          <h2 className="font-archivo text-[40px] font-extrabold uppercase">Core Services</h2>
+          <p className="font-mono text-sm text-brand-muted mt-2">// ARCHITECTURE & DEVELOPMENT</p>
         </div>
+        <button className="hidden md:flex bg-transparent border-2 border-brand-text font-space text-sm font-bold uppercase px-4 py-2 hover:bg-brand-primary transition-all items-center gap-2">
+          View All Services <ArrowUpRight size={18} />
+        </button>
+      </div>
 
-        {/* Service Cards - with enhanced glass effect */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {services.map((service, i) => (
+      {/* Cards Grid */}
+      <div className="grid md:grid-cols-3 gap-6">
+        {services.map((service) => (
+          <div
+            key={service.title}
+            className={`service-card border-4 border-brand-text p-8 relative group overflow-hidden ${
+              service.highlight ? 'bg-brand-primary' : 'bg-brand-bg'
+            }`}
+            style={{ boxShadow: '4px 4px 0px 0px rgba(0,0,0,1)' }}
+          >
+            {/* Hover Icon Corner */}
             <div
-              key={service.title}
-              className="service-card group relative glass-card-hover p-8 rounded-2xl cursor-pointer"
-              style={{ 
-                animationDelay: `${i * 0.2}s`,
-                transform: 'translateY(0)',
-                transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
-              }}
+              className={`absolute top-0 right-0 p-4 transform translate-x-full group-hover:translate-x-0 transition-transform border-l-4 border-b-4 border-brand-text ${
+                service.highlight ? 'bg-brand-bg' : 'bg-brand-primary'
+              }`}
             >
-              {/* Glow orb on hover */}
-              <div className="absolute -top-20 -right-20 w-40 h-40 rounded-full bg-accent/10 blur-[40px] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-              
-              {/* Icon */}
-              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-accent/20 to-accent-bright/10 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:from-accent/30 group-hover:to-accent-bright/20 transition-all duration-300 border border-accent/20 group-hover:border-accent/40">
-                <service.icon className="w-6 h-6 text-accent" />
-              </div>
-
-              <h3 className="text-xl font-semibold mb-3 text-text group-hover:text-accent transition-colors duration-300">{service.title}</h3>
-              <p className="text-sm text-text-muted mb-6 leading-relaxed">{service.description}</p>
-
-              {/* Feature list with lime accents */}
-              <ul className="space-y-3">
-                {service.features.map(feature => (
-                  <li key={feature} className="flex items-center gap-3 text-sm text-text-muted group-hover:text-text transition-colors">
-                    <span className="w-2 h-2 rounded-full bg-gradient-to-r from-accent to-accent-bright group-hover:shadow-[0_0_8px_rgba(152,205,0,0.5)] transition-shadow duration-300" />
-                    {feature}
-                  </li>
-                ))}
-              </ul>
-
-              {/* Hover arrow indicator */}
-              <div className="absolute bottom-6 right-6 w-8 h-8 rounded-full border border-accent/20 group-hover:border-accent/60 group-hover:bg-accent/10 transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-accent">
-                  <path d="M5 12h14M12 5l7 7-7 7"/>
-                </svg>
-              </div>
+              <service.icon size={24} />
             </div>
-          ))}
-        </div>
+
+            <h3
+              className={`font-archivo text-2xl font-bold uppercase mb-4 ${
+                service.highlight ? 'text-[#4f6d00]' : ''
+              }`}
+            >
+              {service.title}
+            </h3>
+            
+            <p
+              className={`font-inter text-base mb-6 ${
+                service.highlight ? 'text-brand-text' : 'text-brand-muted'
+              }`}
+            >
+              {service.description}
+            </p>
+
+            {/* Tech Tags */}
+            <div className="flex gap-2 flex-wrap">
+              {service.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className={`border-2 border-brand-text px-2 py-1 font-mono text-xs uppercase ${
+                    service.highlight ? 'bg-brand-bg' : 'bg-brand-surface'
+                  }`}
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
+        ))}
       </div>
     </section>
   );

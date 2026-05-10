@@ -3,32 +3,9 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
-import { ArrowRight, Folder } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
-
-const projects = [
-  {
-    title: 'CloudPOS',
-    description: 'Point-of-sale system for SMEs with real-time inventory, multi-branch support, and analytics dashboard.',
-    tech: ['Next.js', 'Node.js', 'PostgreSQL', 'Stripe'],
-  },
-  {
-    title: 'TaskFlow',
-    description: 'Project management tool with Kanban boards, team collaboration, and automated workflows.',
-    tech: ['React', 'GraphQL', 'MongoDB', 'AWS'],
-  },
-  {
-    title: 'EduPlatform',
-    description: 'Learning management system with video courses, quizzes, progress tracking, and certification.',
-    tech: ['Next.js', 'Python', 'Redis', 'Cloudflare'],
-  },
-  {
-    title: 'HealthTrack',
-    description: 'Health monitoring app with wearables integration, appointment booking, and telemedicine features.',
-    tech: ['React Native', 'Firebase', 'TensorFlow', 'Twilio'],
-  },
-];
 
 export function PortfolioSection() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -55,71 +32,156 @@ export function PortfolioSection() {
   }, []);
 
   return (
-    <section id="portfolio" className="py-32 px-6 relative" ref={sectionRef}>
-      {/* Background orbs */}
-      <div className="absolute top-0 right-0 w-96 h-96 rounded-full bg-accent/5 blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-64 h-64 rounded-full bg-accent-bright/5 blur-[100px] pointer-events-none" />
-      
-      <div className="max-w-5xl mx-auto relative z-10">
-        {/* Section Header */}
-        <div className="text-center mb-20">
-          <span className="inline-block text-xs font-mono text-accent uppercase tracking-widest mb-4 px-4 py-2 glass-subtle rounded-full">
-            Portfolio
-          </span>
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-text" style={{ fontFamily: "'Playfair Display', serif" }}>
-            Our <span className="text-gradient-accent">Work</span>
-          </h2>
-          <div className="w-12 h-0.5 bg-accent mx-auto mb-4" />
-          <p className="text-base text-text-muted font-mono">// Selected projects</p>
+    <section id="portfolio" className="bg-[#e1e5cf] border-y-4 border-brand-text py-16 md:py-24" ref={sectionRef}>
+      <div className="max-w-[1440px] mx-auto px-4 md:px-16">
+        {/* Header */}
+        <div className="mb-12">
+          <h2 className="font-archivo text-[40px] font-extrabold uppercase mb-2">Featured Projects</h2>
+          <p className="font-mono text-sm text-brand-muted">// RECENT DEPLOYMENTS & SAAS PRODUCTS</p>
         </div>
 
-        {/* Project Grid - glass cards with hover glow */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {projects.map((project, i) => (
-            <div
-              key={project.title}
-              className="project-card group relative glass-subtle p-8 rounded-2xl transition-all duration-500 cursor-pointer overflow-hidden"
-            >
-              {/* Glow effect on hover */}
-              <div className="absolute inset-0 bg-gradient-to-br from-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+        {/* SaaS Products */}
+        <div className="mb-16">
+          <div className="inline-block border-b-4 border-brand-text pb-2 mb-6">
+            <h3 className="font-archivo text-2xl font-bold uppercase">SaaS Products</h3>
+          </div>
+          
+          <div className="space-y-12">
+            {/* Nexus Analytics */}
+            <div className="project-card border-4 border-brand-text bg-brand-bg flex flex-col md:flex-row" style={{ boxShadow: '4px 4px 0px 0px rgba(0,0,0,1)' }}>
+              {/* Image & Info */}
+              <div 
+                className="md:w-1/2 p-8 flex flex-col justify-between border-b-4 md:border-b-0 md:border-r-4 border-brand-text relative bg-cover bg-center"
+                style={{ backgroundImage: "url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80')" }}
+              >
+                <div className="absolute inset-0 bg-brand-bg/80 backdrop-blur-md" />
+                <div className="relative z-10 space-y-4">
+                  <div className="inline-block border-2 border-brand-text bg-brand-primary px-3 py-1 font-space text-sm font-bold uppercase">
+                    Data Visualization
+                  </div>
+                  <h3 className="font-archivo text-[40px] font-extrabold uppercase leading-tight">Nexus Analytics Platform</h3>
+                  <p className="font-inter text-base font-medium">A high-performance analytics dashboard processing real-time data streams for enterprise clients. Built with a focus on speed and clarity.</p>
+                  <div className="flex gap-2 flex-wrap pt-2">
+                    {['Go', 'Clickhouse', 'React'].map(tech => (
+                      <span key={tech} className="border-2 border-brand-text px-2 py-1 font-mono text-xs uppercase bg-[#e6ead5] font-bold">{tech}</span>
+                    ))}
+                  </div>
+                </div>
+                <div className="relative z-10 mt-8">
+                  <button className="bg-brand-bg text-brand-text border-2 border-brand-text font-space text-sm font-bold uppercase px-6 py-3 hover:bg-brand-primary transition-all flex items-center gap-2" style={{ boxShadow: '4px 4px 0px 0px rgba(0,0,0,1)' }}>
+                    View Case Study <ArrowRight size={18} />
+                  </button>
+                </div>
+              </div>
               
-              {/* Project thumbnail area with folder icon */}
-              <div className="h-40 rounded-xl bg-surface flex items-center justify-center mb-6 border border-accent/10 group-hover:border-accent/30 transition-all duration-300 relative overflow-hidden">
-                {/* Inner glow on hover */}
-                <div className="absolute inset-0 bg-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                <Folder className="w-16 h-16 text-accent/30 group-hover:text-accent/60 group-hover:scale-110 transition-all duration-300 relative z-10" />
-              </div>
-
-              <div className="mb-4 relative z-10">
-                <h3 className="text-xl font-semibold mb-2 text-text group-hover:text-accent transition-colors duration-300">{project.title}</h3>
-                <p className="text-sm text-text-muted leading-relaxed">{project.description}</p>
-              </div>
-
-              {/* Tech badges */}
-              <div className="flex flex-wrap gap-2 mb-6 relative z-10">
-                {project.tech.map(tech => (
-                  <span key={tech} className="px-3 py-1 text-xs rounded-full bg-surface border border-accent/20 text-text-muted font-mono group-hover:border-accent/40 group-hover:text-text transition-all duration-300">
-                    {tech}
-                  </span>
+              {/* Metrics */}
+              <div className="md:w-1/2 bg-[#f2f6e0] p-8 grid grid-cols-2 gap-4 content-center">
+                {[
+                  { value: '10M+', label: 'Rows Processed/Day' },
+                  { value: '<50ms', label: 'Event Processing' },
+                  { value: '99.99%', label: 'System Uptime' },
+                  { value: '50k+', label: 'Active Users' }
+                ].map((metric) => (
+                  <div key={metric.label} className="border-2 border-brand-text bg-brand-bg p-4 text-center">
+                    <span className="block font-archivo text-2xl font-bold text-brand-primary mb-1" style={{ WebkitTextStroke: '1px #191d10', textShadow: '2px 2px 0px #191d10' }}>{metric.value}</span>
+                    <span className="font-mono text-xs text-brand-muted">{metric.label}</span>
+                  </div>
                 ))}
               </div>
+            </div>
 
-              {/* View project link */}
-              <div className="flex items-center gap-2 text-sm text-accent opacity-0 group-hover:opacity-100 transition-all duration-300 pt-4 border-t border-accent/10">
-                <span className="font-mono font-semibold tracking-wider">VIEW PROJECT</span>
-                <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+            {/* SuperHRM */}
+            <div className="project-card border-4 border-brand-text bg-brand-bg flex flex-col md:flex-row-reverse" style={{ boxShadow: '4px 4px 0px 0px rgba(0,0,0,1)' }}>
+              {/* Image & Info */}
+              <div 
+                className="md:w-1/2 p-8 flex flex-col justify-between border-b-4 md:border-b-0 md:border-l-4 border-brand-text relative bg-cover bg-center"
+                style={{ backgroundImage: "url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80')" }}
+              >
+                <div className="absolute inset-0 bg-brand-bg/80 backdrop-blur-md" />
+                <div className="relative z-10 space-y-4">
+                  <div className="inline-block border-2 border-brand-text bg-brand-primary px-3 py-1 font-space text-sm font-bold uppercase">
+                    Human Resources
+                  </div>
+                  <h3 className="font-archivo text-[40px] font-extrabold uppercase leading-tight">SuperHRM</h3>
+                  <p className="font-inter text-base font-medium">A unified personnel management suite designed to handle enterprise-scale organizations with zero friction and maximum security.</p>
+                  <div className="flex gap-2 flex-wrap pt-2">
+                    {['Node.js', 'PostgreSQL', 'Redis'].map(tech => (
+                      <span key={tech} className="border-2 border-brand-text px-2 py-1 font-mono text-xs uppercase bg-[#e6ead5] font-bold">{tech}</span>
+                    ))}
+                  </div>
+                </div>
+                <div className="relative z-10 mt-8">
+                  <button className="bg-brand-bg text-brand-text border-2 border-brand-text font-space text-sm font-bold uppercase px-6 py-3 hover:bg-brand-primary transition-all flex items-center gap-2" style={{ boxShadow: '4px 4px 0px 0px rgba(0,0,0,1)' }}>
+                    View Case Study <ArrowRight size={18} />
+                  </button>
+                </div>
+              </div>
+              
+              {/* Metrics */}
+              <div className="md:w-1/2 bg-[#f2f6e0] p-8 grid grid-cols-2 gap-4 content-center">
+                {[
+                  { value: '1M+', label: 'Events/Min' },
+                  { value: '<100ms', label: 'API Response' },
+                  { value: '99.95%', label: 'System Uptime' },
+                  { value: '100k+', label: 'Active Users' }
+                ].map((metric) => (
+                  <div key={metric.label} className="border-2 border-brand-text bg-brand-bg p-4 text-center">
+                    <span className="block font-archivo text-2xl font-bold text-brand-primary mb-1" style={{ WebkitTextStroke: '1px #191d10', textShadow: '2px 2px 0px #191d10' }}>{metric.value}</span>
+                    <span className="font-mono text-xs text-brand-muted">{metric.label}</span>
+                  </div>
+                ))}
               </div>
             </div>
-          ))}
+          </div>
         </div>
 
-        {/* View All CTA */}
-        <div className="text-center mt-16">
-          <button className="group glass-subtle px-8 py-4 text-text-muted rounded-xl hover:border-accent/50 hover:text-accent transition-all duration-300 font-mono text-sm inline-flex items-center gap-3 hover:scale-105">
-            VIEW ALL PROJECTS
-            <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-          </button>
+        {/* Client Deployments */}
+        <div>
+          <div className="inline-block border-b-4 border-brand-text pb-2 mb-6">
+            <h3 className="font-archivo text-2xl font-bold uppercase">Client Deployments</h3>
+          </div>
+          
+          <div className="space-y-12">
+            {/* AeroCart Engine */}
+            <div className="project-card border-4 border-brand-text bg-brand-bg flex flex-col md:flex-row" style={{ boxShadow: '4px 4px 0px 0px rgba(0,0,0,1)' }}>
+              {/* Image & Info */}
+              <div 
+                className="md:w-1/2 p-8 flex flex-col justify-between border-b-4 md:border-b-0 md:border-r-4 border-brand-text relative bg-cover bg-center"
+                style={{ backgroundImage: "url('https://images.unsplash.com/photo-1563013544-824ae1b704d3?auto=format&fit=crop&q=80')" }}
+              >
+                <div className="absolute inset-0 bg-brand-bg/80 backdrop-blur-md" />
+                <div className="relative z-10 space-y-4">
+                  <div className="inline-block border-2 border-brand-text bg-brand-primary px-3 py-1 font-space text-sm font-bold uppercase">
+                    E-Commerce Engine
+                  </div>
+                  <h3 className="font-archivo text-[40px] font-extrabold uppercase leading-tight">AeroCart Engine</h3>
+                  <p className="font-inter text-base font-medium">A headless e-commerce backend designed for rapid deployment and immense scalability, featuring robust inventory syncing.</p>
+                </div>
+                <div className="relative z-10 mt-8">
+                  <button className="bg-brand-bg text-brand-text border-2 border-brand-text font-space text-sm font-bold uppercase px-6 py-3 hover:bg-brand-primary transition-all flex items-center gap-2" style={{ boxShadow: '4px 4px 0px 0px rgba(0,0,0,1)' }}>
+                    View Case Study <ArrowRight size={18} />
+                  </button>
+                </div>
+              </div>
+              
+              {/* Metrics */}
+              <div className="md:w-1/2 bg-[#f2f6e0] p-8 grid grid-cols-2 gap-4 content-center">
+                {[
+                  { value: '$2M+', label: 'Monthly GMV Processed' },
+                  { value: 'PCI-DSS', label: 'Compliance Met' },
+                  { value: '<200ms', label: 'Inventory Sync Speed' },
+                  { value: '99.99%', label: 'Checkout Success' }
+                ].map((metric) => (
+                  <div key={metric.label} className="border-2 border-brand-text bg-brand-bg p-4 text-center">
+                    <span className="block font-archivo text-2xl font-bold text-brand-primary mb-1" style={{ WebkitTextStroke: '1px #191d10', textShadow: '2px 2px 0px #191d10' }}>{metric.value}</span>
+                    <span className="font-mono text-xs text-brand-muted">{metric.label}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
+
       </div>
     </section>
   );

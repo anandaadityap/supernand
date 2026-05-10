@@ -3,9 +3,6 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
-import { SubtleGlassCard } from '@/components/ui/SubtleGlassCard';
-import Link from 'next/link';
-import { ArrowRight, Sparkles } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -33,46 +30,33 @@ export function CTASection() {
   }, []);
 
   return (
-    <section className="py-24 px-6 relative" ref={sectionRef}>
-      {/* Animated background orbs */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 left-1/4 w-96 h-96 rounded-full bg-accent/10 blur-[150px] animate-orb-float" />
-        <div className="absolute bottom-0 right-1/4 w-80 h-80 rounded-full bg-accent-bright/10 blur-[120px] animate-orb-float" style={{ animationDelay: '-6s' }} />
-      </div>
-      
-      <div className="max-w-4xl mx-auto relative z-10">
-        <SubtleGlassCard className="text-center py-16 md:py-20 relative overflow-hidden">
-          {/* Glow effect */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full bg-accent/10 blur-[120px] pointer-events-none" />
-          
-          <div className="cta-content relative z-10">
-            {/* Badge */}
-            <div className="inline-flex items-center gap-2 glass-subtle px-4 py-2 rounded-full mb-6">
-              <span className="w-2 h-2 rounded-full bg-accent animate-pulse-glow" />
-              <span className="text-xs font-mono text-accent">Ready to start?</span>
-            </div>
-            
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4" style={{ fontFamily: "'Playfair Display', serif" }}>
-              Ready to <span className="text-gradient-accent text-glow">Build</span>?
-            </h2>
-            <p className="text-base md:text-lg text-text-muted mb-10 max-w-xl mx-auto">
-              Let's turn your idea into a powerful digital product. Start a conversation today.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link
-                href="/#contact"
-                className="group inline-flex items-center justify-center gap-2 px-8 py-4 bg-accent text-bg font-semibold rounded-xl hover:bg-accent-bright transition-all duration-300 glow-accent hover:scale-105"
-              >
-                <Sparkles size={18} className="group-hover:rotate-12 transition-transform" />
-                Start Your Project
-              </Link>
-              <button className="group inline-flex items-center justify-center gap-2 px-8 py-4 glass-subtle text-text-muted rounded-xl hover:border-accent hover:text-accent hover:scale-105 transition-all duration-300 font-mono text-sm">
-                Schedule a Call
-                <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
-              </button>
-            </div>
-          </div>
-        </SubtleGlassCard>
+    <section className="max-w-[1440px] mx-auto px-4 md:px-16 py-16 md:py-[120px] text-center" ref={sectionRef}>
+      <div 
+        className="border-4 border-brand-text bg-brand-primary p-8 md:p-16 max-w-4xl mx-auto relative overflow-hidden"
+        style={{ boxShadow: '4px 4px 0px 0px rgba(0,0,0,1)' }}
+      >
+        {/* Dot pattern background */}
+        <div 
+          className="absolute inset-0 opacity-50"
+          style={{
+            backgroundImage: "url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMiIgZmlsbD0iIzE5MWQxMCIgZmlsbC1vcGFjaXR5PSIwLjIiLz48L3N2Zz4=')"
+          }}
+        />
+        
+        <div className="relative z-10 cta-content">
+          <h2 className="font-archivo text-5xl md:text-[64px] font-extrabold uppercase text-[#4f6d00] mb-6 tracking-tight leading-tight">
+            Build the Future.
+          </h2>
+          <p className="font-inter text-lg text-brand-text mb-8 max-w-2xl mx-auto font-medium">
+            Ready to architect a high-performance solution? Let's discuss your next project and build something transparent, bold, and unapologetically technical.
+          </p>
+          <button 
+            className="bg-brand-bg text-brand-text border-4 border-brand-text font-space text-lg font-bold uppercase px-12 py-6 hover:translate-x-[-2px] hover:translate-y-[-2px] transition-all duration-200"
+            style={{ boxShadow: '4px 4px 0px 0px rgba(0,0,0,1)' }}
+          >
+            Initialize Contact
+          </button>
+        </div>
       </div>
     </section>
   );

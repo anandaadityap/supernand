@@ -3,11 +3,8 @@
 import { useState } from "react";
 import Image from "next/image";
 import { ExternalLink, Github, Star } from "lucide-react";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { StaggerContainer } from "@/components/animations/ScrollAnimations";
-import AnimatedSection from "@/components/animations/ScrollAnimations";
+import { Button } from "@/components/ui/Button";
 import { motion } from "framer-motion";
 import type { Project } from "@/lib/types";
 
@@ -17,106 +14,81 @@ interface ProjectCardProps {
 }
 
 function ProjectCard({ project, index }: ProjectCardProps) {
-  const [rotateX, setRotateX] = useState(0);
-  const [rotateY, setRotateY] = useState(0);
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const card = e.currentTarget;
-    const rect = card.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
-    const rotateXValue = ((y - centerY) / centerY) * -8;
-    const rotateYValue = ((x - centerX) / centerX) * 8;
-    setRotateX(rotateXValue);
-    setRotateY(rotateYValue);
-  };
-
-  const handleMouseLeave = () => {
-    setRotateX(0);
-    setRotateY(0);
-  };
-
   return (
     <motion.div
-      initial={{ opacity: 0, y: 60 }}
+      initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
-      style={{
-        transform: `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`,
-        transition: "transform 0.2s ease-out",
-      }}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      className="cursor-pointer"
+      transition={{ duration: 0.4, delay: index * 0.1 }}
+      className="group cursor-pointer"
     >
-      <Card className="h-full overflow-hidden group hover:shadow-[0_0_40px_var(--glow-primary)] transition-all duration-300">
+      <div className="h-full border-4 border-brand-text bg-brand-surface hover:bg-brand-surface/80 hover:shadow-brutal transition-all duration-200">
         {/* Thumbnail */}
         <div className="relative aspect-video overflow-hidden">
           <Image
             src={project.thumbnail || "/placeholder.jpg"}
             alt={project.title}
             fill
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
+            className="object-cover group-hover:scale-105 transition-transform duration-300"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-surface)] via-transparent to-transparent opacity-60" />
+          <div className="absolute inset-0 bg-brand-text/20" />
 
           {project.featured && (
-            <div className="absolute top-3 right-3 flex items-center gap-1 bg-[var(--primary)] text-white px-3 py-1 rounded-full text-xs font-medium">
+            <div className="absolute top-3 right-3 flex items-center gap-1 bg-brand-primary text-brand-text px-3 py-1 font-mono text-xs font-bold uppercase shadow-brutal-sm">
               <Star className="w-3 h-3" fill="currentColor" />
               Featured
             </div>
           )}
         </div>
 
-        <CardHeader>
-          <CardTitle className="group-hover:text-[var(--primary)] transition-colors">
+        {/* Content */}
+        <div className="p-5">
+          <h3 className="font-archivo font-extrabold text-xl uppercase mb-2 text-brand-text group-hover:text-brand-muted transition-colors">
             {project.title}
-          </CardTitle>
-        </CardHeader>
-
-        <CardContent>
-          <p className="text-sm text-[var(--text-muted)] line-clamp-2 mb-4">
+          </h3>
+          <p className="text-sm text-brand-muted font-mono line-clamp-2 mb-4">
             {project.description}
           </p>
 
           {/* Tags */}
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 mb-4">
             {project.tags?.slice(0, 4).map((tag) => (
-              <Badge key={tag} variant="secondary" className="text-xs">
+              <span 
+                key={tag} 
+                className="border-2 border-brand-text px-2 py-0.5 font-mono text-xs uppercase"
+              >
                 {tag}
-              </Badge>
+              </span>
             ))}
           </div>
-        </CardContent>
 
-        <CardFooter className="gap-3">
-          {project.liveUrl && (
-            <a
-              href={project.liveUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1.5 text-sm text-[var(--accent)] hover:text-[var(--primary)] transition-colors"
-            >
-              <ExternalLink className="w-4 h-4" />
-              Live Demo
-            </a>
-          )}
-          {project.githubUrl && (
-            <a
-              href={project.githubUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1.5 text-sm text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
-            >
-              <Github className="w-4 h-4" />
-              Source
-            </a>
-          )}
-        </CardFooter>
-      </Card>
+          {/* Actions */}
+          <div className="flex gap-3">
+            {project.liveUrl && (
+              <a
+                href={project.liveUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 text-sm font-mono font-bold text-brand-text hover:text-brand-primary transition-colors"
+              >
+                <ExternalLink className="w-4 h-4" />
+                Live Demo
+              </a>
+            )}
+            {project.githubUrl && (
+              <a
+                href={project.githubUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 text-sm font-mono font-bold text-brand-muted hover:text-brand-text transition-colors"
+              >
+                <Github className="w-4 h-4" />
+                Source
+              </a>
+            )}
+          </div>
+        </div>
+      </div>
     </motion.div>
   );
 }
@@ -138,46 +110,59 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
       : projects.filter((p) => p.tags?.includes(filter));
 
   return (
-    <section id="projects" className="py-24 md:py-32 px-6 relative">
+    <section id="projects" className="py-32 px-6 relative">
       <div className="max-w-7xl mx-auto">
-        <AnimatedSection className="text-center mb-16">
-          <span className="font-mono text-sm text-[var(--accent)] tracking-widest mb-4 block">
-            MY WORK
+        {/* Section Header */}
+        <div className="text-center mb-16">
+          <span className="border-2 border-brand-text px-3 py-1 font-mono text-xs uppercase tracking-widest mb-4 inline-block shadow-brutal-sm">
+            My Work
           </span>
-          <h2 className="font-syne text-4xl md:text-5xl font-bold mb-4">
+          <h2 className="text-4xl md:text-5xl font-archivo font-extrabold uppercase mb-4 text-brand-text">
             Featured Projects
           </h2>
-          <p className="text-[var(--text-muted)] max-w-xl mx-auto">
-            A selection of projects I&apos;ve built, from e-commerce platforms
-            to real-time applications.
+          <div className="w-12 h-1 bg-brand-primary mx-auto mb-4" />
+          <p className="text-base text-brand-muted font-mono max-w-xl mx-auto">
+            // A selection of projects I&apos;ve built
           </p>
-        </AnimatedSection>
+        </div>
 
-        {/* Filter Tabs */}
-        <AnimatedSection delay={0.2}>
-          <Tabs defaultValue="all" onValueChange={setFilter} className="mb-12">
-            <TabsList className="flex flex-wrap justify-center gap-2">
-              <TabsTrigger value="all">All</TabsTrigger>
-              {allTags.map((tag) => (
-                <TabsTrigger key={tag} value={tag}>
-                  {tag}
-                </TabsTrigger>
-              ))}
-            </TabsList>
+        {/* Filter Tabs - Brutalist Style */}
+        <div className="flex flex-wrap justify-center gap-3 mb-12">
+          <button
+            onClick={() => setFilter("all")}
+            className={`px-4 py-2 font-mono text-sm font-bold uppercase border-4 transition-all duration-200 ${
+              filter === "all"
+                ? "bg-brand-text text-brand-surface shadow-brutal"
+                : "border-brand-text bg-brand-surface hover:shadow-brutal-sm"
+            }`}
+          >
+            All
+          </button>
+          {allTags.map((tag) => (
+            <button
+              key={tag}
+              onClick={() => setFilter(tag)}
+              className={`px-4 py-2 font-mono text-sm font-bold uppercase border-4 transition-all duration-200 ${
+                filter === tag
+                  ? "bg-brand-text text-brand-surface shadow-brutal"
+                  : "border-brand-text bg-brand-surface hover:shadow-brutal-sm"
+              }`}
+            >
+              {tag}
+            </button>
+          ))}
+        </div>
 
-            <TabsContent value={filter} className="mt-8">
-              <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredProjects.map((project, index) => (
-                  <ProjectCard
-                    key={project.id}
-                    project={project}
-                    index={index}
-                  />
-                ))}
-              </StaggerContainer>
-            </TabsContent>
-          </Tabs>
-        </AnimatedSection>
+        {/* Projects Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredProjects.map((project, index) => (
+            <ProjectCard
+              key={project.id}
+              project={project}
+              index={index}
+            />
+          ))}
+        </div>
       </div>
     </section>
   );

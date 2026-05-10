@@ -4,52 +4,26 @@
 
 @layer base {
   :root {
-    /* Lime greens */
-    --accent: #98CD00;
-    --accent-bright: #B6F500;
-    --accent-yellow: #A4DD00;
-    --accent-dark: #6B9900;
+    /* Brand Colors - Neo-Brutalist Light Mode */
+    --brand-primary: #B6F500;   /* Neon Green */
+    --brand-secondary: #4b6700;
+    --brand-bg: #F8FBE6;        /* Soft Cream */
+    --brand-surface: #ECF0DA;
+    --brand-text: #191D10;      /* Pure Dark */
+    --brand-muted: #434933;
+    --brand-outline: #737A61;
+    --brand-inverse: #2e3224;
 
-    /* Dark mode (default) */
-    --bg: #0A0F0A;
-    --bg-elevated: #0F140D;
-    --surface: #141A12;
-    --surface-hover: #1A2218;
-    --text: #E8F0E4;
-    --text-muted: #8A9880;
-    --border: rgba(152, 205, 0, 0.15);
-    --border-hover: rgba(152, 205, 0, 0.3);
-
-    /* Glass tints */
-    --glass-bg: rgba(20, 26, 18, 0.7);
-    --glass-border: rgba(152, 205, 0, 0.2);
-    --glass-shadow: rgba(152, 205, 0, 0.1);
-  }
-
-  .light {
-    --accent: #7AAF00;
-    --accent-bright: #98CD00;
-    --accent-yellow: #8FBF00;
-    --accent-dark: #6B9900;
-
-    --bg: #F5F7F0;
-    --bg-elevated: #FFFFFF;
-    --surface: #E8EFE4;
-    --surface-hover: #DCE8D8;
-    --text: #1A2218;
-    --text-muted: #5C6850;
-    --border: rgba(122, 175, 0, 0.2);
-    --border-hover: rgba(122, 175, 0, 0.4);
-
-    --glass-bg: rgba(255, 255, 255, 0.7);
-    --glass-border: rgba(122, 175, 0, 0.3);
-    --glass-shadow: rgba(122, 175, 0, 0.15);
+    /* Border */
+    --border: #191D10;
   }
 
   * {
     box-sizing: border-box;
     padding: 0;
     margin: 0;
+    /* REMOVE ALL ROUNDED CORNERS - Neo-Brutalist Sharp Style */
+    border-radius: 0 !important;
   }
 
   html {
@@ -58,18 +32,17 @@
   }
 
   body {
-    background-color: var(--bg);
-    color: var(--text);
-    font-family: var(--font-inter), sans-serif;
+    background-color: var(--brand-bg);
+    color: var(--brand-text);
+    font-family: 'Inter', sans-serif;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    transition: background-color 0.3s ease, color 0.3s ease;
   }
 
   ::selection {
-    background-color: var(--accent);
-    color: var(--bg);
+    background-color: var(--brand-primary);
+    color: var(--brand-text);
   }
 
   ::-webkit-scrollbar {
@@ -77,100 +50,80 @@
   }
 
   ::-webkit-scrollbar-track {
-    background: var(--bg);
+    background: var(--brand-bg);
   }
 
   ::-webkit-scrollbar-thumb {
-    background: var(--surface);
-    border-radius: 3px;
+    background: var(--brand-surface);
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: var(--text-muted);
+    background: var(--brand-muted);
+  }
+}
+
+@layer components {
+  /* Neo-Brutalist Glass Panel - Main component */
+  .glass-panel {
+    background: rgba(255, 250, 220, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 4px solid var(--border);
+    box-shadow: 4px 4px 0px 0px var(--border);
+    transition: all 0.2s ease;
+  }
+
+  .glass-panel:hover {
+    box-shadow: 8px 8px 0px 0px var(--border);
+    transform: translateY(-2px) translateX(-2px);
+  }
+
+  /* Glass Panel Subtle - Lighter version */
+  .glass-panel-subtle {
+    background: rgba(255, 250, 220, 0.4);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 2px solid var(--border);
+    box-shadow: 2px 2px 0px 0px var(--border);
+    transition: all 0.2s ease;
+  }
+
+  .glass-panel-subtle:hover {
+    box-shadow: 4px 4px 0px 0px var(--border);
+    transform: translateY(-1px) translateX(-1px);
+  }
+
+  /* Accent Glow */
+  .glow-accent {
+    box-shadow: 0 0 20px rgba(182, 245, 0, 0.4), 0 0 40px rgba(182, 245, 0, 0.2);
+  }
+
+  .glow-accent-strong {
+    box-shadow: 0 0 30px rgba(182, 245, 0, 0.5), 0 0 60px rgba(182, 245, 0, 0.3);
+  }
+
+  /* Accent pill/badge */
+  .accent-pill {
+    background: var(--brand-primary);
+    color: var(--brand-text);
+    box-shadow: 2px 2px 0px 0px var(--border);
+  }
+
+  /* Text gradient accent */
+  .text-gradient-accent {
+    background: linear-gradient(135deg, var(--brand-primary) 0%, #d4ff33 50%, var(--brand-primary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 }
 
 @layer utilities {
-  .text-accent { color: var(--accent); }
-  .bg-accent { background-color: var(--accent); }
-  .border-accent { border-color: var(--accent); }
-  .hover\:text-accent:hover { color: var(--accent); }
-  .hover\:bg-accent:hover { background-color: var(--accent); }
-
-  .bg-bg { background-color: var(--bg); }
-  .bg-surface { background-color: var(--surface); }
-  .text-text { color: var(--text); }
-  .text-text-muted { color: var(--text-muted); }
-  .border-border { border-color: var(--border); }
-}
-
-/* ========== GLASS COMPONENTS ========== */
-@layer components {
-  /* Subtle glass - used on specific cards */
-  .glass-subtle {
-    background: var(--glass-bg);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid var(--glass-border);
-    box-shadow: 0 4px 32px rgba(0, 0, 0, 0.3), inset 0 0 60px rgba(152, 205, 0, 0.02);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .glass-subtle:hover {
-    border-color: var(--accent);
-    box-shadow: 0 0 30px rgba(152, 205, 0, 0.15), 0 0 60px rgba(152, 205, 0, 0.08), inset 0 0 80px rgba(152, 205, 0, 0.04);
-    transform: translateY(-2px);
-  }
-
-  /* Full glass card - more prominent */
-  .glass-card {
-    background: var(--glass-bg);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    border: 1px solid var(--glass-border);
-    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.4), inset 0 0 80px rgba(152, 205, 0, 0.03);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .glass-card:hover {
-    border-color: var(--accent);
-    box-shadow: 0 0 40px rgba(152, 205, 0, 0.2), 0 0 80px rgba(152, 205, 0, 0.1), inset 0 0 100px rgba(152, 205, 0, 0.05);
-  }
-
-  /* Card hover states with scale and glow */
-  .glass-card-hover:hover {
-    transform: scale(1.02);
-    border-color: var(--accent);
-    box-shadow: 0 0 30px rgba(152, 205, 0, 0.25), 0 8px 40px rgba(0, 0, 0, 0.4);
-  }
-
-  /* Accent glow for hover states */
-  .glow-accent {
-    box-shadow: 0 0 20px rgba(152, 205, 0, 0.4), 0 0 40px rgba(152, 205, 0, 0.2);
-  }
-
-  .glow-accent-strong {
-    box-shadow: 0 0 30px rgba(152, 205, 0, 0.5), 0 0 60px rgba(152, 205, 0, 0.3), 0 0 100px rgba(152, 205, 0, 0.15);
-  }
-
-  /* Accent border on hover */
-  .hover-border-accent:hover {
-    border-color: var(--accent) !important;
-  }
-
-  /* Lime accent pill/badge */
-  .accent-pill {
-    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-bright) 100%);
-    color: var(--bg);
-    box-shadow: 0 4px 16px rgba(152, 205, 0, 0.3);
-  }
-
-  /* Scale and glow on hover - for project cards, service cards, etc */
-  .card-hover-glow:hover {
-    transform: scale(1.02);
-    border-color: var(--accent);
-    box-shadow: 0 0 25px rgba(152, 205, 0, 0.2), 0 8px 32px rgba(0, 0, 0, 0.3);
-  }
+  .text-accent { color: var(--brand-primary); }
+  .bg-accent { background-color: var(--brand-primary); }
+  .border-accent { border-color: var(--brand-primary); }
+  .hover\:text-accent:hover { color: var(--brand-primary); }
+  .hover\:bg-accent:hover { background-color: var(--brand-primary); }
 }
 
 /* ========== ANIMATIONS ========== */
@@ -179,19 +132,12 @@
   50% { transform: translateY(-20px) rotate(3deg); }
 }
 
-@keyframes float-reverse {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-15px) rotate(-3deg); }
-}
-
 @keyframes pulse-glow {
   0%, 100% { 
-    box-shadow: 0 0 20px rgba(152, 205, 0, 0.3), 0 0 40px rgba(152, 205, 0, 0.1);
-    opacity: 0.8;
+    box-shadow: 0 0 20px rgba(182, 245, 0, 0.3), 0 0 40px rgba(182, 245, 0, 0.1);
   }
   50% { 
-    box-shadow: 0 0 40px rgba(152, 205, 0, 0.5), 0 0 80px rgba(152, 205, 0, 0.25);
-    opacity: 1;
+    box-shadow: 0 0 40px rgba(182, 245, 0, 0.5), 0 0 80px rgba(182, 245, 0, 0.25);
   }
 }
 
@@ -200,24 +146,8 @@
   50% { background-position: 100% 50%; }
 }
 
-@keyframes shimmer {
-  0% { background-position: -200% center; }
-  100% { background-position: 200% center; }
-}
-
-@keyframes orb-float {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  25% { transform: translate(10px, -20px) scale(1.05); }
-  50% { transform: translate(-5px, -40px) scale(0.95); }
-  75% { transform: translate(-20px, -20px) scale(1.02); }
-}
-
 .animate-float {
   animation: float 6s ease-in-out infinite;
-}
-
-.animate-float-reverse {
-  animation: float-reverse 5s ease-in-out infinite;
 }
 
 .animate-pulse-glow {
@@ -229,52 +159,14 @@
   background-size: 200% 200%;
 }
 
-.animate-shimmer {
-  animation: shimmer 3s ease-in-out infinite;
-  background-size: 200% auto;
-}
-
-.animate-orb-float {
-  animation: orb-float 12s ease-in-out infinite;
-}
-
-/* Glow text effect */
+/* Text glow effect */
 .text-glow {
-  text-shadow: 0 0 20px rgba(152, 205, 0, 0.5), 0 0 40px rgba(152, 205, 0, 0.3);
+  text-shadow: 0 0 20px rgba(182, 245, 0, 0.5), 0 0 40px rgba(182, 245, 0, 0.3);
 }
 
-/* Gradient text with accent */
-.text-gradient-accent {
-  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-bright) 50%, var(--accent-yellow) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* Border glow on hover */
-.border-glow {
-  position: relative;
-}
-
-.border-glow::before {
-  content: '';
-  position: absolute;
-  inset: -2px;
-  background: linear-gradient(135deg, var(--accent), var(--accent-bright), var(--accent));
-  border-radius: inherit;
-  z-index: -1;
-  opacity: 0;
-  transition: opacity 0.4s ease;
-  filter: blur(8px);
-}
-
-.border-glow:hover::before {
-  opacity: 0.5;
-}
-
-/* ========== LIVE BACKGROUND GRADIENT ========== */
+/* Live background gradient */
 .bg-gradient-live {
-  background: linear-gradient(-45deg, var(--bg), var(--bg-elevated), var(--surface), var(--bg));
+  background: linear-gradient(-45deg, var(--brand-bg), var(--brand-surface), var(--brand-bg), var(--brand-surface));
   background-size: 400% 400%;
   animation: gradient-shift 15s ease infinite;
 }

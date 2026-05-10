@@ -3,7 +3,8 @@
 import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
-import { SubtleGlassCard } from '@/components/ui/SubtleGlassCard';
+import { GlassCard } from '@/components/ui/GlassCard';
+import { Button } from '@/components/ui/Button';
 import { Mail, MapPin, Phone, Send, Zap } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -45,129 +46,119 @@ export function ContactSection() {
 
   return (
     <section id="contact" className="py-32 px-6 relative" ref={sectionRef}>
-      {/* Background glow */}
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] rounded-full bg-accent/5 blur-[150px] pointer-events-none" />
+      {/* Background geometric accent */}
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-brand-surface/50 pointer-events-none" />
       
       <div className="max-w-5xl mx-auto relative z-10">
         {/* Section Header */}
         <div className="text-center mb-20">
-          <span className="inline-block text-xs font-mono text-accent uppercase tracking-widest mb-4 px-4 py-2 glass-subtle rounded-full">
+          <span className="border-2 border-brand-text px-3 py-1 font-mono text-xs uppercase tracking-widest mb-4 inline-block shadow-brutal-sm">
             Contact
           </span>
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-text" style={{ fontFamily: "'Playfair Display', serif" }}>
-            Let's <span className="text-gradient-accent">Talk</span>
+          <h2 className="text-4xl md:text-5xl font-archivo font-extrabold uppercase mb-4 text-brand-text">
+            Let's Talk
           </h2>
-          <div className="w-12 h-0.5 bg-accent mx-auto mb-4" />
-          <p className="text-base text-text-muted font-mono">// Have a project in mind?</p>
+          <div className="w-12 h-1 bg-brand-primary mx-auto mb-4" />
+          <p className="text-base text-brand-muted font-mono">// Have a project in mind?</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-12">
-          {/* Contact Info - enhanced glass cards with glow on hover */}
+          {/* Contact Info - Brutalist Sharp Boxes */}
           <div className="lg:col-span-2 space-y-6">
-            <div className="contact-content group glass-card-hover flex items-center gap-4 p-6 rounded-2xl cursor-pointer">
-              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-accent/20 to-accent-bright/10 flex items-center justify-center flex-shrink-0 border border-accent/30 group-hover:border-accent/60 group-hover:scale-110 transition-all duration-300">
-                <Mail className="w-5 h-5 text-accent" />
+            <div className="contact-content group p-6 border-4 border-brand-text shadow-brutal-sm hover:shadow-brutal transition-all duration-200 flex items-center gap-4">
+              <div className="w-14 h-14 border-4 border-brand-text bg-brand-surface flex items-center justify-center flex-shrink-0 group-hover:border-brand-primary transition-colors duration-200">
+                <Mail className="w-5 h-5 text-brand-primary" />
               </div>
               <div>
-                <p className="text-xs text-text-muted uppercase tracking-widest mb-1 font-mono">Email</p>
-                <a href="mailto:hello@supernand.com" className="text-base hover:text-accent transition-colors group-hover:text-accent">
+                <p className="text-xs text-brand-muted uppercase tracking-widest mb-1 font-mono">Email</p>
+                <a href="mailto:hello@supernand.com" className="text-base text-brand-text hover:text-brand-primary transition-colors duration-200">
                   hello@supernand.com
                 </a>
               </div>
-              {/* Glow indicator */}
-              <div className="absolute right-6 w-2 h-2 rounded-full bg-accent/50 opacity-0 group-hover:opacity-100 group-hover:shadow-[0_0_10px_rgba(152,205,0,0.5)] transition-all duration-300" />
             </div>
 
-            <div className="contact-content group glass-card-hover flex items-center gap-4 p-6 rounded-2xl cursor-pointer">
-              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-accent/20 to-accent-bright/10 flex items-center justify-center flex-shrink-0 border border-accent/30 group-hover:border-accent/60 group-hover:scale-110 transition-all duration-300">
-                <Phone className="w-5 h-5 text-accent" />
+            <div className="contact-content group p-6 border-4 border-brand-text shadow-brutal-sm hover:shadow-brutal transition-all duration-200 flex items-center gap-4">
+              <div className="w-14 h-14 border-4 border-brand-text bg-brand-surface flex items-center justify-center flex-shrink-0 group-hover:border-brand-primary transition-colors duration-200">
+                <Phone className="w-5 h-5 text-brand-primary" />
               </div>
               <div>
-                <p className="text-xs text-text-muted uppercase tracking-widest mb-1 font-mono">Phone</p>
-                <a href="tel:+6281234567890" className="text-base hover:text-accent transition-colors group-hover:text-accent">
+                <p className="text-xs text-brand-muted uppercase tracking-widest mb-1 font-mono">Phone</p>
+                <a href="tel:+6281234567890" className="text-base text-brand-text hover:text-brand-primary transition-colors duration-200">
                   +62 812 3456 7890
                 </a>
               </div>
-              <div className="absolute right-6 w-2 h-2 rounded-full bg-accent/50 opacity-0 group-hover:opacity-100 group-hover:shadow-[0_0_10px_rgba(152,205,0,0.5)] transition-all duration-300" />
             </div>
 
-            <div className="contact-content group glass-card-hover flex items-center gap-4 p-6 rounded-2xl cursor-pointer">
-              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-accent/20 to-accent-bright/10 flex items-center justify-center flex-shrink-0 border border-accent/30 group-hover:border-accent/60 group-hover:scale-110 transition-all duration-300">
-                <MapPin className="w-5 h-5 text-accent" />
+            <div className="contact-content group p-6 border-4 border-brand-text shadow-brutal-sm hover:shadow-brutal transition-all duration-200 flex items-center gap-4">
+              <div className="w-14 h-14 border-4 border-brand-text bg-brand-surface flex items-center justify-center flex-shrink-0 group-hover:border-brand-primary transition-colors duration-200">
+                <MapPin className="w-5 h-5 text-brand-primary" />
               </div>
               <div>
-                <p className="text-xs text-text-muted uppercase tracking-widest mb-1 font-mono">Location</p>
-                <p className="text-base">Jakarta, Indonesia</p>
+                <p className="text-xs text-brand-muted uppercase tracking-widest mb-1 font-mono">Location</p>
+                <p className="text-base text-brand-text">Jakarta, Indonesia</p>
               </div>
-              <div className="absolute right-6 w-2 h-2 rounded-full bg-accent/50 opacity-0 group-hover:opacity-100 group-hover:shadow-[0_0_10px_rgba(152,205,0,0.5)] transition-all duration-300" />
             </div>
           </div>
 
-          {/* Contact Form - enhanced glass card */}
+          {/* Contact Form - Sharp bordered card */}
           <div className="lg:col-span-3 contact-content">
-            <SubtleGlassCard className="relative overflow-hidden">
-              {/* Inner gradient glow */}
-              <div className="absolute top-0 right-0 w-40 h-40 rounded-full bg-accent/10 blur-[60px] pointer-events-none" />
-              
-              <div className="flex items-center gap-3 mb-8 relative z-10">
-                <div className="w-10 h-10 rounded-xl bg-accent/20 flex items-center justify-center border border-accent/30">
-                  <Zap className="w-4 h-4 text-accent" />
+            <GlassCard className="p-8">
+              <div className="flex items-center gap-3 mb-8">
+                <div className="w-10 h-10 border-4 border-brand-text bg-brand-surface flex items-center justify-center">
+                  <Zap className="w-4 h-4 text-brand-primary" />
                 </div>
-                <h3 className="text-xl font-semibold">Send a Message</h3>
+                <h3 className="text-xl font-space font-bold uppercase">Send a Message</h3>
               </div>
 
-              <form onSubmit={handleSubmit} className="space-y-5 relative z-10">
+              <form onSubmit={handleSubmit} className="space-y-5">
                 <div className="relative group">
-                  <label className="block text-xs text-text-muted uppercase tracking-widest mb-2 font-mono">Name</label>
+                  <label className="block text-xs text-brand-muted uppercase tracking-widest mb-2 font-mono">Name</label>
                   <input
                     type="text"
                     required
                     value={formState.name}
                     onChange={e => setFormState({ ...formState, name: e.target.value })}
-                    className="w-full px-4 py-3 bg-bg/50 border border-accent/20 rounded-xl text-text placeholder:text-text-muted/50 focus:outline-none focus:border-accent focus:shadow-[0_0_20px_rgba(152,205,0,0.15)] transition-all duration-300 text-base"
+                    className="w-full px-4 py-3 bg-brand-surface border-2 border-brand-text text-brand-text placeholder:text-brand-muted/50 focus:outline-none focus:border-brand-primary transition-all duration-200 text-base"
                     placeholder="John Doe"
                   />
                 </div>
                 <div className="relative group">
-                  <label className="block text-xs text-text-muted uppercase tracking-widest mb-2 font-mono">Email</label>
+                  <label className="block text-xs text-brand-muted uppercase tracking-widest mb-2 font-mono">Email</label>
                   <input
                     type="email"
                     required
                     value={formState.email}
                     onChange={e => setFormState({ ...formState, email: e.target.value })}
-                    className="w-full px-4 py-3 bg-bg/50 border border-accent/20 rounded-xl text-text placeholder:text-text-muted/50 focus:outline-none focus:border-accent focus:shadow-[0_0_20px_rgba(152,205,0,0.15)] transition-all duration-300 text-base"
+                    className="w-full px-4 py-3 bg-brand-surface border-2 border-brand-text text-brand-text placeholder:text-brand-muted/50 focus:outline-none focus:border-brand-primary transition-all duration-200 text-base"
                     placeholder="john@example.com"
                   />
                 </div>
                 <div className="relative group">
-                  <label className="block text-xs text-text-muted uppercase tracking-widest mb-2 font-mono">Message</label>
+                  <label className="block text-xs text-brand-muted uppercase tracking-widest mb-2 font-mono">Message</label>
                   <textarea
                     required
                     rows={4}
                     value={formState.message}
                     onChange={e => setFormState({ ...formState, message: e.target.value })}
-                    className="w-full px-4 py-3 bg-bg/50 border border-accent/20 rounded-xl text-text placeholder:text-text-muted/50 focus:outline-none focus:border-accent focus:shadow-[0_0_20px_rgba(152,205,0,0.15)] transition-all duration-300 text-base resize-none"
+                    className="w-full px-4 py-3 bg-brand-surface border-2 border-brand-text text-brand-text placeholder:text-brand-muted/50 focus:outline-none focus:border-brand-primary transition-all duration-200 text-base resize-none"
                     placeholder="Tell us about your project..."
                   />
                 </div>
-                <button
-                  type="submit"
-                  className="w-full group py-4 bg-accent text-bg font-semibold rounded-xl hover:bg-accent-bright transition-all duration-300 flex items-center justify-center gap-2 glow-accent hover:scale-[1.02]"
-                >
+                <Button variant="primary" size="lg" className="w-full" type="submit">
                   {submitted ? (
                     <>
-                      <Zap size={18} className="animate-pulse" />
+                      <Zap size={18} />
                       Message Sent!
                     </>
                   ) : (
                     <>
-                      <Send size={18} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-all" />
+                      <Send size={18} />
                       Send Message
                     </>
                   )}
-                </button>
+                </Button>
               </form>
-            </SubtleGlassCard>
+            </GlassCard>
           </div>
         </div>
       </div>
