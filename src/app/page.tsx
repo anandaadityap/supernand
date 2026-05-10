@@ -18,4 +18,4 @@ export default function Home() {
       <CTASection />
     </>
   );
-}
+}// deployed via GitHub Actions
