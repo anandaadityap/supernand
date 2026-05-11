@@ -25,7 +25,7 @@ jobs:
             cd /var/www/supernand
             git fetch origin main
             git reset --hard origin/main
-            docker compose build app
+            docker compose build --no-cache app
             docker compose down --remove-orphans || true
             docker compose up -d app
             docker image prune -f
