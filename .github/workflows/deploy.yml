@@ -25,5 +25,6 @@ jobs:
             cd /var/www/supernand
             git pull origin main
             docker compose build app
+            docker compose rm -f app || true
             docker compose up -d app
             docker image prune -f
