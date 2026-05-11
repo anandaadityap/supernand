@@ -30,21 +30,14 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GHCR_PAT }}
 
-      - name: Extract metadata (tags, refs)
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          tags: |
-            type=sha,prefix=
-            type=latest
-
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: |
+            ghcr.io/anandaadityap/supernand:${{ github.sha }}
+            ghcr.io/anandaadityap/supernand:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
