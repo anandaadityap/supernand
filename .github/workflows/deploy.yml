@@ -5,9 +5,16 @@ on:
     branches:
       - main
 
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: anandaadityap/supernand
+
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     
     steps:
       - name: Checkout code
@@ -16,43 +23,42 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Login to Docker Hub
+      - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GHCR_PAT }}
 
-      - name: Extract metadata for Docker
+      - name: Extract metadata (tags, refs)
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/supernand
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=raw,value=latest
-            type=sha
+            type=commit,prefix=
+            type=sha,prefix=
+            type=latest
 
       - name: Build and push Docker image
-        id: build
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
-          tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/supernand:latest
-            ${{ secrets.DOCKERHUB_USERNAME }}/supernand:${{ github.sha }}
+          tags: ${{ steps.meta.outputs.tags }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Report image info
-        run: |
-          echo "Built and pushed image: ${{ secrets.DOCKERHUB_USERNAME }}/supernand:latest"
-          echo "SHA tag: ${{ secrets.DOCKERHUB_USERNAME }}/supernand:${{ github.sha }}"
-
-      - name: Deploy via SSH
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
+    
+    steps:
+      - name: Deploy via SSH to VPS
         uses: appleboy/ssh-action@v1.0.3
-        env:
-          IMAGE_TAG: ${{ github.sha }}
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
@@ -60,29 +66,30 @@ jobs:
           port: 22
           script: |
             set -e
-            echo "=== Deploying with image tag: $IMAGE_TAG ==="
             
-            cd /root/.openclaw/workspace/supernand-portfolio
+            IMAGE_TAG=${{ github.sha }}
             
-            # Pull latest code (includes docker-compose.yml)
-            git fetch origin main
-            git reset --hard origin/main
-            git clean -fdx
+            echo "=== Logging in to GHCR ==="
+            echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u anandaadityap --password-stdin
             
-            # Stop existing containers
-            docker compose down 2>/dev/null || true
-            docker rm -f supernand-app 2>/dev/null || true
+            echo "=== Stopping and removing old container ==="
+            docker stop supernand-app 2>/dev/null || true
+            docker rm supernand-app 2>/dev/null || true
             
-            # Pull the new image from Docker Hub
-            echo "Pulling image ${{ secrets.DOCKERHUB_USERNAME }}/supernand:$IMAGE_TAG"
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/supernand:$IMAGE_TAG
+            echo "=== Pulling new image ==="
+            docker pull ghcr.io/anandaadityap/supernand:${IMAGE_TAG}
+            docker tag ghcr.io/anandaadityap/supernand:${IMAGE_TAG} ghcr.io/anandaadityap/supernand:latest
             
-            # Tag as local
-            docker tag ${{ secrets.DOCKERHUB_USERNAME }}/supernand:$IMAGE_TAG supernand-app:latest
+            echo "=== Starting new container ==="
+            docker run -d \
+              --name supernand-app \
+              --restart unless-stopped \
+              -p 3000:3000 \
+              -e NEXT_PUBLIC_SITE_URL=https://supernand.tech \
+              -e PORT=3000 \
+              ghcr.io/anandaadityap/supernand:latest
             
-            # Start services
-            docker compose up -d
+            docker logout ghcr.io
             
-            # Show status
-            docker compose ps
             echo "=== Deployment complete ==="
+            docker ps | grep supernand-app

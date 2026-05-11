@@ -1,37 +1,16 @@
-version: '3.8'
-
 services:
-  caddy:
-    image: caddy:2
-    container_name: caddy
-    restart: unless-stopped
-    ports:
-      - "80:80"
-      - "443:443"
-      - "443:443/udp"
-    volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile:ro
-      - ./data:/data
-      - ./config:/config
-    environment:
-      - EMAIL=admin@supernand.tech
-    networks:
-      - supernand-network
-
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: ghcr.io/anandaadityap/supernand:latest
     container_name: supernand-app
     restart: unless-stopped
-    expose:
-      - "3000"
+    ports:
+      - "3000:3000"
     environment:
-      NEXT_PUBLIC_SITE_URL: https://supernand.tech
-      PORT: 3000
-    networks:
-      - supernand-network
-
-networks:
-  supernand-network:
-    driver: bridge
+      - NEXT_PUBLIC_SITE_URL=https://supernand.tech
+      - PORT=3000
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
