@@ -60,6 +60,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: deployment-package
+          path: ./artifact
 
       - name: Deploy via SSH with password
         uses: appleboy/ssh-action@v1.0.3
@@ -73,8 +74,8 @@ jobs:
             cd /var/www/supernand
             # Backup .env if exists
             cp .env .env.backup 2>/dev/null || true
-            # Extract new code
-            tar -xzf deployment-package.tar.gz
+            # Extract new code from artifact directory
+            tar -xzf ${{ github.workspace }}/deployment-package.tar.gz
             # Restore .env
             cp .env.backup .env 2>/dev/null || true
             # Rebuild and restart
