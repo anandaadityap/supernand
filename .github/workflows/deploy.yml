@@ -40,7 +40,9 @@ jobs:
             cd /var/www/supernand
             git fetch origin main
             git reset --hard origin/main
-            docker compose build --no-cache app
             docker compose down --remove-orphans || true
+            docker builder prune -af --filter "until=168h" || true
+            docker image rm -f $(docker images -q 'supernand-app*' 2>/dev/null) || true
+            docker image prune -af || true
+            docker compose build --no-cache app
             docker compose up -d app
-            docker image prune -f
