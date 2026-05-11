@@ -1,23 +1,22 @@
 version: '3.8'
 
 services:
-  postgres:
-    image: postgres:16-alpine
-    container_name: postgres-portfolio
+  caddy:
+    image: caddy:2
+    container_name: caddy
     restart: unless-stopped
-    environment:
-      POSTGRES_PASSWORD: supernand2025
-      POSTGRES_DB: portfolio_db
     ports:
-      - "5432:5432"
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
     volumes:
-      - postgres-data:/var/lib/postgresql/data
-      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./data:/data
+      - ./config:/config
+    environment:
+      - EMAIL=admin@supernand.tech
+    networks:
+      - supernand-network
 
   app:
     build:
@@ -25,18 +24,14 @@ services:
       dockerfile: Dockerfile
     container_name: supernand-app
     restart: unless-stopped
-    ports:
-      - "3000:3000"
+    expose:
+      - "3000"
     environment:
-      DATABASE_URL: postgresql://postgres:supernand2025@postgres:5432/portfolio_db
-      ADMIN_PASSWORD: nanda2025supernand
-      JWT_SECRET: supernand-jwt-secret-2025-change-in-production
-      NEXTAUTH_SECRET: supernand-nextauth-secret-2025
       NEXT_PUBLIC_SITE_URL: https://supernand.tech
       PORT: 3000
-    depends_on:
-      postgres:
-        condition: service_healthy
+    networks:
+      - supernand-network
 
-volumes:
-  postgres-data:
+networks:
+  supernand-network:
+    driver: bridge

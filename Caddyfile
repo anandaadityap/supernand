@@ -1,0 +1,11 @@
+{
+    email admin@supernand.tech
+}
+
+supernand.tech {
+    reverse_proxy supernand-app:3000
+}
+
+www.supernand.tech {
+    redir https://supernand.tech{uri}
+}
