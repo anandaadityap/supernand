@@ -23,8 +23,9 @@ jobs:
           use_insecure_cipher: true
           script: |
             cd /var/www/supernand
-            git pull origin main
+            git fetch origin main
+            git reset --hard origin/main
             docker compose build app
-            docker compose rm -f app || true
+            docker compose down --remove-orphans || true
             docker compose up -d app
             docker image prune -f
