@@ -10,6 +10,7 @@ const buttonVariants = cva(
       variant: {
         primary: 'bg-brand-primary text-brand-text',
         ghost: 'bg-transparent text-brand-text hover:bg-brand-surface',
+        outline: 'bg-transparent border-2 border-brand-text text-brand-text hover:bg-brand-surface',
       },
       size: {
         sm: 'px-4 py-2 text-sm',
