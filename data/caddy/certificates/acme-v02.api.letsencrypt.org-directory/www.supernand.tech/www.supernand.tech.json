@@ -1,0 +1,19 @@
+{
+	"sans": [
+		"www.supernand.tech"
+	],
+	"issuer_data": {
+		"url": "https://acme-v02.api.letsencrypt.org/acme/cert/05f0a8c8037abaf6e7b4204bf86f6bec6d84",
+		"ca": "https://acme-v02.api.letsencrypt.org/directory",
+		"account": "https://acme-v02.api.letsencrypt.org/acme/acct/3323625426",
+		"renewal_info": {
+			"suggestedWindow": {
+				"start": "2026-07-09T09:00:29Z",
+				"end": "2026-07-11T04:11:18Z"
+			},
+			"_uniqueIdentifier": "rkie3IcdRKBv2qLlYHQEeMKcAIA.BfCoyAN6uvbntCBL-G9r7G2E",
+			"_retryAfter": "2026-05-11T12:14:17.950617614Z",
+			"_selectedTime": "2026-07-10T20:18:37Z"
+		}
+	}
+}

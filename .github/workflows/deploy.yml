@@ -30,9 +30,10 @@ jobs:
           images: ghcr.io/${{ github.repository_owner }}/supernand
           tags: |
             type=raw,value=latest
-            type=ref,event=branch
+            type=sha
 
       - name: Build and push Docker image
+        id: build
         uses: docker/build-push-action@v5
         with:
           context: .
@@ -40,9 +41,17 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          outputs: type=image,name=ghcr.io/${{ github.repository_owner }}/supernand,push=true
+
+      - name: Report image info
+        run: |
+          echo "Built and pushed image: ghcr.io/${{ github.repository_owner }}/supernand:latest"
+          echo "SHA tag: ghcr.io/${{ github.repository_owner }}/supernand:${{ github.sha }}"
 
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
+        env:
+          IMAGE_TAG: ${{ github.sha }}
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
@@ -50,9 +59,11 @@ jobs:
           port: 22
           script: |
             set -e
+            echo "=== Deploying with image tag: $IMAGE_TAG ==="
+            
             cd /root/.openclaw/workspace/supernand-portfolio
             
-            # Pull latest code
+            # Pull latest code (includes docker-compose.yml)
             git fetch origin main
             git reset --hard origin/main
             git clean -fdx
@@ -60,9 +71,18 @@ jobs:
             # Stop existing containers
             docker compose down 2>/dev/null || true
             docker rm -f supernand-app 2>/dev/null || true
+            docker rmi -f ghcr.io/${{ github.repository_owner }}/supernand:latest 2>/dev/null || true
             
-            # Start services with docker compose
-            docker compose up -d --build
+            # Pull the new image from GHCR
+            echo "Pulling image ghcr.io/${{ github.repository_owner }}/supernand:$IMAGE_TAG"
+            docker pull ghcr.io/${{ github.repository_owner }}/supernand:$IMAGE_TAG
+            
+            # Tag as local
+            docker tag ghcr.io/${{ github.repository_owner }}/supernand:$IMAGE_TAG supernand-app:latest
+            
+            # Start services
+            docker compose up -d
             
             # Show status
             docker compose ps
+            echo "=== Deployment complete ==="
