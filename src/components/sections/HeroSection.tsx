@@ -34,7 +34,7 @@ export function HeroSection() {
   }, []);
 
   return (
-    <section ref={containerRef} className="pt-20">
+    <section id="hero" ref={containerRef} className="pt-20">
       <div className="max-w-[1440px] mx-auto px-4 md:px-16 py-12 md:py-[120px] grid md:grid-cols-12 gap-6 items-center">
         {/* Left Content - 8 cols */}
         <div className="md:col-span-8 space-y-6">
