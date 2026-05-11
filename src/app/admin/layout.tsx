@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Syne, DM_Sans, JetBrains_Mono } from "next/font/google";
-import "../../styles/globals.css";
+import "../globals.css";
 import AdminNavbar from "@/components/sections/AdminNavbar";
 
 const syne = Syne({
