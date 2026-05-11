@@ -25,14 +25,30 @@ jobs:
       - name: Build application
         run: npm run build
 
-      - name: Upload build artifacts
+      - name: Create deployment package
+        run: |
+          tar -czf deployment-package.tar.gz \
+            .next \
+            public \
+            node_modules/.prisma \
+            package.json \
+            package-lock.json \
+            prisma \
+            Dockerfile \
+            docker-compose.yml \
+            next.config.js \
+            tailwind.config.ts \
+            tsconfig.json \
+            postcss.config.js \
+            next-env.d.ts \
+            .env.example \
+            src
+
+      - name: Upload deployment package
         uses: actions/upload-artifact@v4
         with:
-          name: nextjs-build
-          path: |
-            .next/
-            public/
-            node_modules/.prisma/
+          name: deployment-package
+          path: deployment-package.tar.gz
           retention-days: 1
 
   deploy:
@@ -40,10 +56,10 @@ jobs:
     needs: build
 
     steps:
-      - name: Download build artifacts
+      - name: Download deployment package
         uses: actions/download-artifact@v4
         with:
-          name: nextjs-build
+          name: deployment-package
 
       - name: Deploy via SSH with password
         uses: appleboy/ssh-action@v1.0.3
@@ -55,15 +71,15 @@ jobs:
           use_insecure_cipher: true
           script: |
             cd /var/www/supernand
-            git fetch origin main
-            git reset --hard origin/main
-            # Restore build artifacts
-            cp -r ${{ github.workspace }}/.next ./
-            cp -r ${{ github.workspace }}/public ./
-            cp -r ${{ github.workspace }}/node_modules/.prisma ./node_modules/
-            # Stop old container, rebuild without cache (to refresh base image), and start
+            # Backup .env if exists
+            cp .env .env.backup 2>/dev/null || true
+            # Extract new code
+            tar -xzf deployment-package.tar.gz
+            # Restore .env
+            cp .env.backup .env 2>/dev/null || true
+            # Rebuild and restart
             docker compose down --remove-orphans || true
             docker builder prune -af || true
             docker compose build --no-cache app
             docker compose up -d app
-            docker image prune -af
+            docker image prune -af || true
