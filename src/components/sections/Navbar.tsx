@@ -132,7 +132,7 @@ export default function Navbar() {
           }}
           className="text-2xl font-archivo font-black tracking-tighter text-brand-text"
         >
-          SUPERNAND EDITED
+          SUPERNAND
         </Link>
 
         {/* Desktop Nav */}
