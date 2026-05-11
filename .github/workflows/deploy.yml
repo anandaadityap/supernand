@@ -24,21 +24,25 @@ jobs:
           script: |
             cd /var/www/supernand
             
-            # Stop and remove all containers and associated images/volumes
+            # Stop everything and remove all containers, images, and volumes
             docker compose down --remove-orphans --volumes 2>/dev/null || true
             
-            # Remove all Docker builder cache to ensure fresh build
-            docker builder prune -af --filter "until=168h" 2>/dev/null || true
+            # Remove all Docker builder cache completely
+            docker builder prune -af 2>/dev/null || true
             
-            # Pull fresh code from GitHub
+            # Also remove ALL local git changes and force fresh checkout
             git fetch origin main
             git reset --hard origin/main
+            git clean -fdx
             
-            # Rebuild from scratch without any cache
+            # Remove .next cache to force fresh build (this is critical!)
+            rm -rf .next node_modules/.cache
+            
+            # Pull fresh base images
+            docker compose pull postgres || true
+            
+            # Rebuild from scratch with no cache
             docker compose build --no-cache app
             
             # Start the app
-            docker compose up -d app
-            
-            # Clean up unused images
-            docker image prune -af 2>/dev/null || true
+            docker compose up -d
