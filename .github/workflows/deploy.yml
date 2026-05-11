@@ -5,6 +5,11 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+  packages: write
+  id-token: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -30,5 +35,4 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: ghcr.io/anandaadityap/supernand:${{ github.sha }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          provenance: false
